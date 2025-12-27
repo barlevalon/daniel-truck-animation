@@ -350,7 +350,7 @@
             right: 50px;
             box-shadow: 0 0 50px #FFD93D;
             cursor: pointer;
-            z-index: 15;
+            z-index: 1;
         }
 
         .sun:active {
@@ -389,6 +389,7 @@
             color: #333;
             animation: birdFly 15s linear infinite;
             left: 100%;
+            z-index: 5;
         }
         
         .bird1 {
@@ -426,6 +427,54 @@
             to {
                 left: -50px;
                 transform: rotate(-35deg) translateY(0);
+            }
+        }
+
+        /* UFO */
+        .ufo {
+            position: absolute;
+            font-size: 28px;
+            top: 12%;
+            left: -50px;
+            opacity: 0;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        body.night-mode .ufo {
+            animation: ufoFly 25s linear infinite;
+            animation-delay: 8s;
+        }
+
+        @keyframes ufoFly {
+            0% {
+                left: -50px;
+                top: 12%;
+                opacity: 0;
+                transform: rotate(0deg);
+            }
+            5% {
+                opacity: 1;
+            }
+            25% {
+                top: 8%;
+            }
+            50% {
+                top: 18%;
+                transform: rotate(10deg);
+            }
+            75% {
+                top: 5%;
+                transform: rotate(-5deg);
+            }
+            95% {
+                opacity: 1;
+            }
+            100% {
+                left: 110%;
+                top: 15%;
+                opacity: 0;
+                transform: rotate(0deg);
             }
         }
         
@@ -910,7 +959,20 @@
         }
 
         body.night-mode .bird {
+            display: block;
+        }
+
+        /* Day/night flyers */
+        .night-flyer {
             display: none;
+        }
+
+        body.night-mode .day-flyer {
+            display: none;
+        }
+
+        body.night-mode .night-flyer {
+            display: inline;
         }
 
         body.night-mode .tree-leaves {
@@ -1031,9 +1093,10 @@
     <div class="cloud cloud2"></div>
     <div class="cloud cloud3"></div>
     
-    <div class="bird bird1">🕊️</div>
-    <div class="bird bird2">🕊️</div>
-    <div class="bird bird3">🕊️</div>
+    <div class="bird bird1"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
+    <div class="bird bird2"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
+    <div class="bird bird3"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
+    <div class="ufo">🛸</div>
     
     <!-- Trees in background -->
     <div class="tree tree1">
