@@ -670,6 +670,14 @@
         }
 
         @media (max-width: 600px) {
+            body {
+                background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 45%, #90EE90 45%, #90EE90 100%);
+            }
+
+            body.night-mode {
+                background: linear-gradient(to bottom, #1a1a2e 0%, #1a1a2e 45%, #2d4a3e 45%, #2d4a3e 100%);
+            }
+
             h1 {
                 font-size: 1.4em;
                 margin-top: 10px;
@@ -699,7 +707,7 @@
 
             .truck-container {
                 transform: translateX(-50%) scale(0.6);
-                bottom: 120px;
+                bottom: 180px;
             }
 
             @keyframes bounce {
@@ -709,11 +717,11 @@
 
             .road {
                 height: 100px;
-                bottom: 70px;
+                bottom: 160px;
             }
 
             .tree {
-                bottom: 170px;
+                bottom: 260px;
                 transform: scale(0.7);
             }
 
@@ -722,6 +730,10 @@
                 height: 50px;
                 top: 30px;
                 right: 20px;
+            }
+
+            .stars {
+                height: 45%;
             }
         }
 
@@ -753,7 +765,7 @@
 
             .truck-container {
                 transform: translateX(-50%) scale(0.45);
-                bottom: 100px;
+                bottom: 150px;
             }
 
             @keyframes bounce {
@@ -763,11 +775,11 @@
 
             .road {
                 height: 80px;
-                bottom: 50px;
+                bottom: 135px;
             }
 
             .tree {
-                bottom: 130px;
+                bottom: 215px;
                 transform: scale(0.5);
             }
 
