@@ -86,6 +86,11 @@
             border-radius: 10px 10px 5px 5px;
             right: 0;
             bottom: 0;
+            cursor: pointer;
+        }
+
+        .truck-cab:active {
+            filter: brightness(1.1);
         }
 
         /* Cab window */
@@ -161,6 +166,11 @@
             top: 0;
             left: 0;
             border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .trailer:active {
+            filter: brightness(1.05);
         }
 
         /* Trailer stripes */
@@ -339,6 +349,12 @@
             top: 50px;
             right: 50px;
             box-shadow: 0 0 50px #FFD93D;
+            cursor: pointer;
+            z-index: 15;
+        }
+
+        .sun:active {
+            transform: scale(0.95);
         }
 
         /* Title */
@@ -498,9 +514,6 @@
             position: absolute;
             left: 30px;
             top: 80px;
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
             padding: 26px 30px;
             background: linear-gradient(150deg, rgba(255, 255, 255, 0.94), rgba(255, 223, 138, 0.95));
             border-radius: 36px;
@@ -512,12 +525,50 @@
             max-width: 320px;
         }
 
+        .instructions-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+
         .instructions-title {
             font-size: 0.9em;
             font-weight: 700;
             letter-spacing: 0.14em;
             text-transform: uppercase;
             color: #d45a00;
+        }
+
+        .instructions-toggle {
+            background: none;
+            border: none;
+            font-size: 1em;
+            color: #d45a00;
+            cursor: pointer;
+            padding: 0 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .instructions.collapsed .instructions-toggle {
+            transform: rotate(-90deg);
+        }
+
+        .instructions-content {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease, margin-top 0.3s ease;
+            max-height: 500px;
+            opacity: 1;
+            margin-top: 14px;
+        }
+
+        .instructions.collapsed .instructions-content {
+            max-height: 0;
+            opacity: 0;
+            margin-top: 0;
         }
 
         .instructions-item {
@@ -545,14 +596,201 @@
             line-height: 1.1;
         }
 
+        /* Show/hide based on device type */
+        .touch-only {
+            display: none;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .desktop-only {
+                display: none;
+            }
+            .touch-only {
+                display: inline;
+            }
+        }
+
+        /* Also show touch controls on small screens */
+        @media (max-width: 768px) {
+            .desktop-only {
+                display: none;
+            }
+            .touch-only {
+                display: inline;
+            }
+        }
+
         @media (max-width: 600px) {
+            h1 {
+                font-size: 1.4em;
+                margin-top: 10px;
+            }
+
             .instructions {
                 left: 50%;
-                top: 18px;
+                top: 60px;
                 transform: translateX(-50%);
                 max-width: 85vw;
                 text-align: left;
-                gap: 12px;
+                gap: 8px;
+                padding: 16px 20px;
+                border-radius: 24px;
+            }
+
+            .instructions-item {
+                font-size: 1.1em;
+                gap: 10px;
+            }
+
+            .instructions-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.4em;
+            }
+
+            .truck-container {
+                transform: translateX(-50%) scale(0.6);
+                bottom: 120px;
+            }
+
+            @keyframes bounce {
+                from { transform: translateX(-50%) scale(0.6) translateY(0); }
+                to { transform: translateX(-50%) scale(0.6) translateY(-5px); }
+            }
+
+            .road {
+                height: 100px;
+                bottom: 70px;
+            }
+
+            .tree {
+                bottom: 170px;
+                transform: scale(0.7);
+            }
+
+            .sun {
+                width: 50px;
+                height: 50px;
+                top: 30px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            h1 {
+                font-size: 1.1em;
+            }
+
+            .instructions {
+                top: 50px;
+                padding: 12px 16px;
+                gap: 6px;
+            }
+
+            .instructions-title {
+                font-size: 0.75em;
+            }
+
+            .instructions-item {
+                font-size: 0.95em;
+                gap: 8px;
+            }
+
+            .instructions-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 1.2em;
+            }
+
+            .truck-container {
+                transform: translateX(-50%) scale(0.45);
+                bottom: 100px;
+            }
+
+            @keyframes bounce {
+                from { transform: translateX(-50%) scale(0.45) translateY(0); }
+                to { transform: translateX(-50%) scale(0.45) translateY(-5px); }
+            }
+
+            .road {
+                height: 80px;
+                bottom: 50px;
+            }
+
+            .tree {
+                bottom: 130px;
+                transform: scale(0.5);
+            }
+
+            .sun {
+                width: 40px;
+                height: 40px;
+                top: 20px;
+                right: 15px;
+            }
+        }
+
+        /* Landscape on small screens */
+        @media (max-height: 500px) and (orientation: landscape) {
+            h1 {
+                font-size: 1.2em;
+                margin-top: 5px;
+            }
+
+            .instructions {
+                top: 40px;
+                left: 15px;
+                transform: none;
+                padding: 10px 14px;
+                gap: 4px;
+                border-radius: 16px;
+                max-width: 180px;
+            }
+
+            .instructions-title {
+                font-size: 0.7em;
+            }
+
+            .instructions-item {
+                font-size: 0.85em;
+                gap: 6px;
+            }
+
+            .instructions-icon {
+                width: 28px;
+                height: 28px;
+                font-size: 1em;
+            }
+
+            .truck-container {
+                transform: translateX(-50%) scale(0.5);
+                bottom: 80px;
+            }
+
+            @keyframes bounce {
+                from { transform: translateX(-50%) scale(0.5) translateY(0); }
+                to { transform: translateX(-50%) scale(0.5) translateY(-5px); }
+            }
+
+            .road {
+                height: 80px;
+                bottom: 40px;
+            }
+
+            .tree {
+                bottom: 120px;
+                transform: scale(0.5);
+            }
+
+            .sun {
+                width: 40px;
+                height: 40px;
+                top: 10px;
+                right: 15px;
+            }
+
+            .cloud {
+                transform: scale(0.6);
             }
         }
 
@@ -700,6 +938,8 @@
             background: #ffff99;
             right: -4px;
             border-radius: 2px;
+            cursor: pointer;
+            z-index: 5;
         }
 
         .headlight-top {
@@ -831,11 +1071,11 @@
     </div>
     
     <div class="truck-container" id="truck">
-        <div class="trailer">
+        <div class="trailer" id="trailer">
             <div class="trailer-stripe"></div>
             <div class="trailer-text" id="trailer-text">DANIEL</div>
         </div>
-        <div class="truck-cab">
+        <div class="truck-cab" id="truck-cab">
             <div class="cab-window"></div>
             <div class="exhaust"></div>
             <div class="exhaust2"></div>
@@ -860,27 +1100,32 @@
         <div class="wheel wheel-dual wheel7"></div>
     </div>
     
-    <div class="instructions" role="note">
-        <span class="instructions-title">Play Tips</span>
-        <div class="instructions-item">
-            <span class="instructions-icon" aria-hidden="true">🚛</span>
-<span class="instructions-text">Press "H" for HONK!</span>
+    <div class="instructions" role="note" id="instructions">
+        <div class="instructions-header">
+            <span class="instructions-title">Play Tips</span>
+            <button class="instructions-toggle" id="instructions-toggle" aria-label="Toggle instructions">▼</button>
         </div>
-        <div class="instructions-item">
-            <span class="instructions-icon" aria-hidden="true">🎺</span>
-<span class="instructions-text">Press "J" for TOOT!</span>
-        </div>
-        <div class="instructions-item">
-            <span class="instructions-icon" aria-hidden="true">✨</span>
-            <span class="instructions-text">Press "L" to toggle lights</span>
-        </div>
-        <div class="instructions-item">
-            <span class="instructions-icon" aria-hidden="true">🌙</span>
-            <span class="instructions-text">Press "N" for night mode</span>
-        </div>
-        <div class="instructions-item">
-            <span class="instructions-icon" aria-hidden="true">✏️</span>
-            <span class="instructions-text">Click name to change</span>
+        <div class="instructions-content">
+            <div class="instructions-item">
+                <span class="instructions-icon" aria-hidden="true">🚛</span>
+                <span class="instructions-text"><span class="desktop-only">Press "H"</span><span class="touch-only">Tap cab</span> for HONK!</span>
+            </div>
+            <div class="instructions-item">
+                <span class="instructions-icon" aria-hidden="true">🎺</span>
+                <span class="instructions-text"><span class="desktop-only">Press "J"</span><span class="touch-only">Tap trailer</span> for TOOT!</span>
+            </div>
+            <div class="instructions-item">
+                <span class="instructions-icon" aria-hidden="true">✨</span>
+                <span class="instructions-text"><span class="desktop-only">Press "L"</span><span class="touch-only">Tap headlights</span> to toggle lights</span>
+            </div>
+            <div class="instructions-item">
+                <span class="instructions-icon" aria-hidden="true">🌙</span>
+                <span class="instructions-text"><span class="desktop-only">Press "N"</span><span class="touch-only">Tap sun/moon</span> for night mode</span>
+            </div>
+            <div class="instructions-item">
+                <span class="instructions-icon" aria-hidden="true">✏️</span>
+                <span class="instructions-text">Click name to change</span>
+            </div>
         </div>
     </div>
     
@@ -1003,6 +1248,40 @@
             changeName();
         });
 
+        // Touch controls: tap cab for HONK
+        document.getElementById('truck-cab').addEventListener('click', (event) => {
+            event.stopPropagation();
+            handleHonk(event, {
+                preset: 'classic',
+                text: 'HONK!'
+            });
+        });
+
+        // Touch controls: tap trailer for TOOT
+        document.getElementById('trailer').addEventListener('click', (event) => {
+            // Don't trigger if clicking the name
+            if (event.target.id === 'trailer-text') return;
+            event.stopPropagation();
+            handleHonk(event, {
+                preset: 'buddy',
+                text: 'TOOT!'
+            });
+        });
+
+        // Touch controls: tap sun/moon for night mode
+        document.querySelector('.sun').addEventListener('click', (event) => {
+            event.stopPropagation();
+            toggleNightMode();
+        });
+
+        // Touch controls: tap headlights to toggle
+        document.querySelectorAll('.headlight').forEach(light => {
+            light.addEventListener('click', (event) => {
+                event.stopPropagation();
+                toggleLights();
+            });
+        });
+
         function toggleNightMode() {
             document.body.classList.toggle('night-mode');
             // Auto-enable lights in night mode
@@ -1011,6 +1290,12 @@
                 truck.classList.add('lights-on');
             }
         }
+
+        // Toggle instructions panel
+        document.getElementById('instructions-header') ||
+        document.querySelector('.instructions-header').addEventListener('click', () => {
+            document.getElementById('instructions').classList.toggle('collapsed');
+        });
 
         document.addEventListener('keydown', (event) => {
             if (event.key && event.key.toLowerCase() === 'h') {
