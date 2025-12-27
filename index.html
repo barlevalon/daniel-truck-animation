@@ -185,6 +185,11 @@
             color: #333;
             text-shadow: 2px 2px 0px #FFF;
             letter-spacing: 4px;
+            cursor: pointer;
+        }
+
+        .trailer-text:hover {
+            color: #555;
         }
 
         /* Wheels */
@@ -391,20 +396,20 @@
         @keyframes birdFly {
             from {
                 left: 100%;
-                transform: rotate(55deg) scaleX(-1) translateY(0);
+                transform: rotate(-55deg) translateY(0);
             }
             25% {
-                transform: rotate(55deg) scaleX(-1) translateY(-10px);
+                transform: rotate(-55deg) translateY(-10px);
             }
             50% {
-                transform: rotate(55deg) scaleX(-1) translateY(5px);
+                transform: rotate(-55deg) translateY(5px);
             }
             75% {
-                transform: rotate(55deg) scaleX(-1) translateY(-5px);
+                transform: rotate(-55deg) translateY(-5px);
             }
             to {
                 left: -50px;
-                transform: rotate(55deg) scaleX(-1) translateY(0);
+                transform: rotate(-55deg) translateY(0);
             }
         }
         
@@ -492,7 +497,7 @@
         .instructions {
             position: absolute;
             left: 30px;
-            top: 30px;
+            top: 80px;
             display: flex;
             flex-direction: column;
             gap: 14px;
@@ -552,31 +557,235 @@
         }
 
 
+        /* Night mode */
+        body.night-mode {
+            background: linear-gradient(to bottom, #1a1a2e 0%, #1a1a2e 70%, #2d4a3e 70%, #2d4a3e 100%);
+        }
+
+        /* Stars */
+        .stars {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 70%;
+            pointer-events: none;
+        }
+
+        body.night-mode .stars {
+            display: block;
+        }
+
+        .star {
+            position: absolute;
+            width: 3px;
+            height: 3px;
+            background: #fff;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite;
+        }
+
+        .star:nth-child(odd) {
+            animation-duration: 1.5s;
+        }
+
+        .star:nth-child(3n) {
+            animation-duration: 2.5s;
+            animation-delay: 0.5s;
+        }
+
+        .star:nth-child(4n) {
+            width: 2px;
+            height: 2px;
+        }
+
+        .star:nth-child(5n) {
+            width: 4px;
+            height: 4px;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        body.night-mode .sun {
+            background: #f0f0f0;
+            box-shadow: 0 0 30px #f0f0f0, 0 0 60px rgba(240, 240, 240, 0.3);
+        }
+
+        body.night-mode .sun .crater {
+            position: absolute;
+            background: rgba(150, 150, 150, 0.3);
+            border-radius: 50%;
+        }
+
+        body.night-mode .sun .crater1 {
+            top: 12px;
+            right: 15px;
+            width: 14px;
+            height: 14px;
+        }
+
+        body.night-mode .sun .crater2 {
+            bottom: 18px;
+            left: 20px;
+            width: 18px;
+            height: 18px;
+        }
+
+        body.night-mode .sun .crater3 {
+            top: 35px;
+            left: 12px;
+            width: 10px;
+            height: 10px;
+        }
+
+        body.night-mode .sun .crater4 {
+            bottom: 25px;
+            right: 22px;
+            width: 8px;
+            height: 8px;
+        }
+
+        body.night-mode .sun .crater5 {
+            top: 20px;
+            left: 30px;
+            width: 12px;
+            height: 12px;
+        }
+
+        body.night-mode h1 {
+            color: #f0f0f0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        body.night-mode .cloud {
+            background: #3a3a5a;
+            opacity: 0.5;
+        }
+
+        body.night-mode .cloud::before,
+        body.night-mode .cloud::after {
+            background: #3a3a5a;
+        }
+
+        body.night-mode .bird {
+            display: none;
+        }
+
+        body.night-mode .tree-leaves {
+            border-bottom-color: #1a3a2a;
+        }
+
+        body.night-mode .tree-leaves::after {
+            border-bottom-color: #1a3a2a;
+        }
+
+        body.night-mode .instructions {
+            background: linear-gradient(150deg, rgba(40, 40, 60, 0.94), rgba(60, 50, 40, 0.95));
+            color: #e0d0c0;
+        }
+
+        body.night-mode .instructions-title {
+            color: #ffaa44;
+        }
+
+        /* Headlights on cab */
+        .headlight {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: #ffff99;
+            right: -4px;
+            border-radius: 2px;
+        }
+
+        .headlight-top {
+            bottom: 45px;
+        }
+
+        .headlight-bottom {
+            bottom: 25px;
+        }
+
+        /* Headlight beam */
+        .headlight-beam {
+            display: none;
+            position: absolute;
+            right: -400px;
+            bottom: -35px;
+            width: 400px;
+            height: 100px;
+            background: linear-gradient(90deg, rgba(255, 255, 150, 0.6), rgba(255, 255, 150, 0.2) 40%, transparent);
+            clip-path: polygon(0 0%, 100% 30%, 100% 100%, 0 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+
         .lights-on .truck-cab {
             box-shadow: 0 0 30px rgba(255, 255, 150, 0.5);
         }
 
-        .lights-on .truck-cab::after {
-            content: '';
-            position: absolute;
-            right: -130px;
-            bottom: 15px;
-            width: 130px;
-            height: 60px;
-            background: linear-gradient(90deg, rgba(255, 255, 200, 0.55), rgba(255, 255, 200, 0));
-            clip-path: polygon(0 40%, 100% 0, 100% 100%, 0 60%);
-            filter: blur(2px);
-        }
-
         .lights-on .cab-window {
             background: linear-gradient(180deg, #FFFDE7, #FFE082);
+        }
+
+        .lights-on .headlight {
+            background: #ffffcc;
+            box-shadow: 0 0 10px #ffffaa, 0 0 20px #ffff88;
+        }
+
+        .lights-on .headlight-beam {
+            display: block;
         }
     </style>
 </head>
 <body>
     <h1>HONK HONK! Big Rig Coming Through!</h1>
     
-    <div class="sun"></div>
+    <div class="sun">
+        <div class="crater crater1"></div>
+        <div class="crater crater2"></div>
+        <div class="crater crater3"></div>
+        <div class="crater crater4"></div>
+        <div class="crater crater5"></div>
+    </div>
+
+    <div class="stars">
+        <div class="star" style="top: 8%; left: 5%;"></div>
+        <div class="star" style="top: 15%; left: 12%;"></div>
+        <div class="star" style="top: 5%; left: 20%;"></div>
+        <div class="star" style="top: 22%; left: 25%;"></div>
+        <div class="star" style="top: 10%; left: 35%;"></div>
+        <div class="star" style="top: 18%; left: 42%;"></div>
+        <div class="star" style="top: 6%; left: 48%;"></div>
+        <div class="star" style="top: 25%; left: 55%;"></div>
+        <div class="star" style="top: 12%; left: 62%;"></div>
+        <div class="star" style="top: 20%; left: 70%;"></div>
+        <div class="star" style="top: 8%; left: 78%;"></div>
+        <div class="star" style="top: 30%; left: 15%;"></div>
+        <div class="star" style="top: 35%; left: 30%;"></div>
+        <div class="star" style="top: 28%; left: 45%;"></div>
+        <div class="star" style="top: 38%; left: 60%;"></div>
+        <div class="star" style="top: 32%; left: 75%;"></div>
+        <div class="star" style="top: 42%; left: 8%;"></div>
+        <div class="star" style="top: 45%; left: 22%;"></div>
+        <div class="star" style="top: 40%; left: 38%;"></div>
+        <div class="star" style="top: 48%; left: 52%;"></div>
+        <div class="star" style="top: 44%; left: 68%;"></div>
+        <div class="star" style="top: 50%; left: 82%;"></div>
+        <div class="star" style="top: 55%; left: 10%;"></div>
+        <div class="star" style="top: 52%; left: 28%;"></div>
+        <div class="star" style="top: 58%; left: 40%;"></div>
+        <div class="star" style="top: 54%; left: 58%;"></div>
+        <div class="star" style="top: 60%; left: 72%;"></div>
+        <div class="star" style="top: 3%; left: 88%;"></div>
+        <div class="star" style="top: 15%; left: 92%;"></div>
+        <div class="star" style="top: 35%; left: 85%;"></div>
+    </div>
     
     <div class="cloud cloud1"></div>
     <div class="cloud cloud2"></div>
@@ -624,7 +833,7 @@
     <div class="truck-container" id="truck">
         <div class="trailer">
             <div class="trailer-stripe"></div>
-            <div class="trailer-text">DANIEL</div>
+            <div class="trailer-text" id="trailer-text">DANIEL</div>
         </div>
         <div class="truck-cab">
             <div class="cab-window"></div>
@@ -633,6 +842,9 @@
             <div class="mirror"></div>
             <div class="door-line"></div>
             <div class="side-step"></div>
+            <div class="headlight headlight-top"></div>
+            <div class="headlight headlight-bottom"></div>
+            <div class="headlight-beam"></div>
         </div>
         <!-- Front tractor wheel (1 single) -->
         <div class="wheel wheel1"></div>
@@ -652,15 +864,23 @@
         <span class="instructions-title">Play Tips</span>
         <div class="instructions-item">
             <span class="instructions-icon" aria-hidden="true">🚛</span>
-            <span class="instructions-text">Click for HONK!</span>
+<span class="instructions-text">Press "H" for HONK!</span>
         </div>
         <div class="instructions-item">
             <span class="instructions-icon" aria-hidden="true">🎺</span>
-            <span class="instructions-text">Right-click for TOOT!</span>
+<span class="instructions-text">Press "J" for TOOT!</span>
         </div>
         <div class="instructions-item">
             <span class="instructions-icon" aria-hidden="true">✨</span>
             <span class="instructions-text">Press "L" to toggle lights</span>
+        </div>
+        <div class="instructions-item">
+            <span class="instructions-icon" aria-hidden="true">🌙</span>
+            <span class="instructions-text">Press "N" for night mode</span>
+        </div>
+        <div class="instructions-item">
+            <span class="instructions-icon" aria-hidden="true">✏️</span>
+            <span class="instructions-text">Click name to change</span>
         </div>
     </div>
     
@@ -769,25 +989,51 @@
             truck.classList.toggle('lights-on');
         }
         
-        document.body.addEventListener('click', (event) => {
-            handleHonk(event, {
-                preset: 'classic',
-                text: 'HONK!'
-            });
-        });
+
         
-        document.body.addEventListener('contextmenu', (event) => {
-            event.preventDefault();
-            handleHonk(event, {
-                preset: 'buddy',
-                text: 'TOOT!'
-            });
+        function changeName() {
+            const newName = prompt('Enter a name for the truck:', document.getElementById('trailer-text').textContent);
+            if (newName !== null && newName.trim() !== '') {
+                document.getElementById('trailer-text').textContent = newName.trim().toUpperCase();
+            }
+        }
+
+        document.getElementById('trailer-text').addEventListener('click', (event) => {
+            event.stopPropagation();
+            changeName();
         });
-        
+
+        function toggleNightMode() {
+            document.body.classList.toggle('night-mode');
+            // Auto-enable lights in night mode
+            const truck = document.getElementById('truck');
+            if (document.body.classList.contains('night-mode')) {
+                truck.classList.add('lights-on');
+            }
+        }
+
         document.addEventListener('keydown', (event) => {
+            if (event.key && event.key.toLowerCase() === 'h') {
+                event.preventDefault();
+                handleHonk(event, {
+                    preset: 'classic',
+                    text: 'HONK!'
+                });
+            }
+            if (event.key && event.key.toLowerCase() === 'j') {
+                event.preventDefault();
+                handleHonk(event, {
+                    preset: 'buddy',
+                    text: 'TOOT!'
+                });
+            }
             if (event.key && event.key.toLowerCase() === 'l') {
                 event.preventDefault();
                 toggleLights();
+            }
+            if (event.key && event.key.toLowerCase() === 'n') {
+                event.preventDefault();
+                toggleNightMode();
             }
         });
     </script>
