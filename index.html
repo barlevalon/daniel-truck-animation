@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moving Semi Truck for Toddler</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #87CEEB 0%, #87CEEB 70%, #90EE90 70%, #90EE90 100%);
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Road */
+        .road {
+            position: absolute;
+            bottom: 100px;
+            width: 100%;
+            height: 150px;
+            background: #333;
+            overflow: hidden;
+        }
+
+        /* Road lines */
+        .road-lines {
+            position: absolute;
+            top: 50%;
+            left: -100px;
+            width: 200%;
+            height: 10px;
+            transform: translateY(-50%);
+        }
+
+        .road-line {
+            position: absolute;
+            width: 80px;
+            height: 10px;
+            background: #FFF;
+            animation: roadMove 2s linear infinite;
+        }
+
+        .road-line:nth-child(1) { left: -200px; }
+        .road-line:nth-child(2) { left: 0px; }
+        .road-line:nth-child(3) { left: 200px; }
+        .road-line:nth-child(4) { left: 400px; }
+        .road-line:nth-child(5) { left: 600px; }
+        .road-line:nth-child(6) { left: 800px; }
+        .road-line:nth-child(7) { left: 1000px; }
+        .road-line:nth-child(8) { left: 1200px; }
+        .road-line:nth-child(9) { left: 1400px; }
+        .road-line:nth-child(10) { left: 1600px; }
+        .road-line:nth-child(11) { left: 1800px; }
+        .road-line:nth-child(12) { left: 2000px; }
+
+        @keyframes roadMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(-200px); }
+        }
+
+        /* Semi truck container */
+        .truck-container {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 0.5s ease-in-out infinite alternate;
+            width: 500px;
+            height: 120px;
+            z-index: 10;
+        }
+
+        @keyframes bounce {
+            from { transform: translateX(-50%) translateY(0); }
+            to { transform: translateX(-50%) translateY(-5px); }
+        }
+
+        /* Truck cab */
+        .truck-cab {
+            position: absolute;
+            width: 140px;
+            height: 120px;
+            background: #FF6B6B;
+            border-radius: 10px 10px 5px 5px;
+            right: 0;
+            bottom: 0;
+        }
+
+        /* Cab window */
+        .cab-window {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: #4ECDC4;
+            border-radius: 5px;
+        }
+        
+        /* Exhaust pipes */
+        .exhaust {
+            position: absolute;
+            width: 8px;
+            height: 60px;
+            background: #555;
+            bottom: 50px;
+            left: -15px;
+            border-radius: 4px;
+        }
+        
+        .exhaust2 {
+            position: absolute;
+            width: 8px;
+            height: 60px;
+            background: #555;
+            bottom: 50px;
+            left: -25px;
+            border-radius: 4px;
+        }
+        
+        /* Side mirrors */
+        .mirror {
+            position: absolute;
+            width: 15px;
+            height: 20px;
+            background: #333;
+            top: 40px;
+            left: -10px;
+            border-radius: 50% 0 0 50%;
+        }
+        
+        /* Door line */
+        .door-line {
+            position: absolute;
+            width: 2px;
+            height: 80px;
+            background: #E55555;
+            left: 50px;
+            top: 20px;
+        }
+        
+        /* Side step */
+        .side-step {
+            position: absolute;
+            width: 30px;
+            height: 8px;
+            background: #666;
+            left: 40px;
+            bottom: 5px;
+            border-radius: 2px;
+        }
+
+        /* Trailer */
+        .trailer {
+            position: absolute;
+            width: 340px;
+            height: 120px;
+            background: #FFE66D;
+            top: 0;
+            left: 0;
+            border-radius: 5px;
+        }
+
+        /* Trailer stripes */
+        .trailer-stripe {
+            position: absolute;
+            width: 100%;
+            height: 20px;
+            background: #FF6B6B;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+        
+        /* Trailer text */
+        .trailer-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: Arial, sans-serif;
+            font-size: 48px;
+            font-weight: bold;
+            color: #333;
+            text-shadow: 2px 2px 0px #FFF;
+            letter-spacing: 4px;
+        }
+
+        /* Wheels */
+        .wheel {
+            position: absolute;
+            width: 35px;
+            height: 35px;
+            background: #333;
+            border-radius: 50%;
+            bottom: -22px;
+            border: 5px solid #666;
+            animation: wheelRotate 1s linear infinite;
+        }
+        
+        /* Dual wheels (shown as single wider wheel in 2D) */
+        .wheel-dual {
+            width: 40px;
+            border-width: 6px;
+        }
+
+        .wheel::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #999;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        @keyframes wheelRotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Front tractor wheels (2) */
+        .wheel1 { right: 100px; }
+        
+        /* Rear tractor wheels (4 dual sets = 8 wheels, shown as 4 in 2D) */
+        .wheel2 { right: 50px; }
+        .wheel3 { right: 10px; }
+        
+        /* Trailer wheels (4 dual sets = 8 wheels, shown as 4 in 2D) */
+        .wheel4 { left: 50px; }
+        .wheel5 { left: 120px; }
+        .wheel6 { left: 190px; }
+        .wheel7 { left: 260px; }
+
+        /* Clouds */
+        .cloud {
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+            opacity: 0.8;
+        }
+
+        .cloud::before,
+        .cloud::after {
+            content: '';
+            position: absolute;
+            background: white;
+            border-radius: 100px;
+        }
+
+        .cloud1 {
+            width: 100px;
+            height: 40px;
+            top: 20%;
+            left: -100px;
+            animation: cloudMove 20s linear infinite;
+        }
+
+        .cloud1::before {
+            width: 50px;
+            height: 50px;
+            top: -25px;
+            left: 10px;
+        }
+
+        .cloud1::after {
+            width: 60px;
+            height: 40px;
+            top: -15px;
+            right: 10px;
+        }
+
+        .cloud2 {
+            width: 80px;
+            height: 35px;
+            top: 10%;
+            left: -80px;
+            animation: cloudMove 25s linear infinite;
+            animation-delay: 5s;
+        }
+
+        .cloud2::before {
+            width: 40px;
+            height: 40px;
+            top: -20px;
+            left: 15px;
+        }
+
+        .cloud2::after {
+            width: 50px;
+            height: 35px;
+            top: -10px;
+            right: 15px;
+        }
+        
+        .cloud3 {
+            width: 90px;
+            height: 38px;
+            top: 30%;
+            left: -90px;
+            animation: cloudMove 30s linear infinite;
+            animation-delay: 10s;
+        }
+
+        .cloud3::before {
+            width: 45px;
+            height: 45px;
+            top: -22px;
+            left: 12px;
+        }
+
+        .cloud3::after {
+            width: 55px;
+            height: 38px;
+            top: -12px;
+            right: 12px;
+        }
+
+        @keyframes cloudMove {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 200px)); }
+        }
+
+        /* Sun */
+        .sun {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            background: #FFD93D;
+            border-radius: 50%;
+            top: 50px;
+            right: 50px;
+            box-shadow: 0 0 50px #FFD93D;
+        }
+
+        /* Title */
+        h1 {
+            text-align: center;
+            color: #333;
+            font-family: Arial, sans-serif;
+            margin-top: 20px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Click message */
+        .click-message {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: Arial, sans-serif;
+            font-size: 1.2em;
+            color: #333;
+            cursor: pointer;
+            background: rgba(255,255,255,0.8);
+            padding: 10px 20px;
+            border-radius: 20px;
+        }
+
+        /* Birds */
+        .bird {
+            position: absolute;
+            font-size: 20px;
+            color: #333;
+            animation: birdFly 15s linear infinite;
+            left: 100%;
+        }
+        
+        .bird1 {
+            top: 15%;
+            animation-delay: 0s;
+            animation-duration: 18s;
+        }
+        
+        .bird2 {
+            top: 25%;
+            animation-delay: 3s;
+            animation-duration: 20s;
+        }
+        
+        .bird3 {
+            top: 8%;
+            animation-delay: 7s;
+            animation-duration: 16s;
+        }
+        
+        @keyframes birdFly {
+            from {
+                left: 100%;
+                transform: rotate(55deg) scaleX(-1) translateY(0);
+            }
+            25% {
+                transform: rotate(55deg) scaleX(-1) translateY(-10px);
+            }
+            50% {
+                transform: rotate(55deg) scaleX(-1) translateY(5px);
+            }
+            75% {
+                transform: rotate(55deg) scaleX(-1) translateY(-5px);
+            }
+            to {
+                left: -50px;
+                transform: rotate(55deg) scaleX(-1) translateY(0);
+            }
+        }
+        
+        /* Trees */
+        .tree {
+            position: absolute;
+            bottom: 250px;
+            width: 60px;
+            animation: treeMove 10s linear infinite;
+            z-index: 1;
+            left: 100%;
+        }
+        
+        .tree-trunk {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 15px;
+            height: 40px;
+            background: #8B4513;
+            border-radius: 2px;
+        }
+        
+        .tree-leaves {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 30px solid transparent;
+            border-right: 30px solid transparent;
+            border-bottom: 50px solid #228B22;
+        }
+        
+        .tree-leaves::after {
+            content: '';
+            position: absolute;
+            top: 25px;
+            left: -25px;
+            width: 0;
+            height: 0;
+            border-left: 25px solid transparent;
+            border-right: 25px solid transparent;
+            border-bottom: 35px solid #228B22;
+        }
+        
+        .tree1 { animation-delay: 0s; }
+        .tree2 { animation-delay: 2.5s; }
+        .tree3 { animation-delay: 5s; }
+        .tree4 { animation-delay: 7.5s; }
+        
+        @keyframes treeMove {
+            from { left: 100%; }
+            to { left: -100px; }
+        }
+        
+        /* Honk effect */
+        .honk {
+            position: absolute;
+            font-size: 3em;
+            font-weight: bold;
+            color: #FF6B6B;
+            animation: honkAnimation 1s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes honkAnimation {
+            0% {
+                transform: scale(0) rotate(-10deg);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.5) rotate(10deg);
+            }
+            100% {
+                transform: scale(1) rotate(0deg) translateY(-100px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>HONK HONK! Big Rig Coming Through!</h1>
+    
+    <div class="sun"></div>
+    
+    <div class="cloud cloud1"></div>
+    <div class="cloud cloud2"></div>
+    <div class="cloud cloud3"></div>
+    
+    <div class="bird bird1">🕊️</div>
+    <div class="bird bird2">🕊️</div>
+    <div class="bird bird3">🕊️</div>
+    
+    <!-- Trees in background -->
+    <div class="tree tree1">
+        <div class="tree-trunk"></div>
+        <div class="tree-leaves"></div>
+    </div>
+    <div class="tree tree2">
+        <div class="tree-trunk"></div>
+        <div class="tree-leaves"></div>
+    </div>
+    <div class="tree tree3">
+        <div class="tree-trunk"></div>
+        <div class="tree-leaves"></div>
+    </div>
+    <div class="tree tree4">
+        <div class="tree-trunk"></div>
+        <div class="tree-leaves"></div>
+    </div>
+    
+    <div class="road">
+        <div class="road-lines">
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+            <div class="road-line"></div>
+        </div>
+    </div>
+    
+    <div class="truck-container" id="truck">
+        <div class="trailer">
+            <div class="trailer-stripe"></div>
+            <div class="trailer-text">DANIEL</div>
+        </div>
+        <div class="truck-cab">
+            <div class="cab-window"></div>
+            <div class="exhaust"></div>
+            <div class="exhaust2"></div>
+            <div class="mirror"></div>
+            <div class="door-line"></div>
+            <div class="side-step"></div>
+        </div>
+        <!-- Front tractor wheel (1 single) -->
+        <div class="wheel wheel1"></div>
+        
+        <!-- Rear tractor wheels (2 dual sets shown as 2 wheels) -->
+        <div class="wheel wheel-dual wheel2"></div>
+        <div class="wheel wheel-dual wheel3"></div>
+        
+        <!-- Trailer wheels (4 dual sets shown as 4 wheels) -->
+        <div class="wheel wheel-dual wheel4"></div>
+        <div class="wheel wheel-dual wheel5"></div>
+        <div class="wheel wheel-dual wheel6"></div>
+        <div class="wheel wheel-dual wheel7"></div>
+    </div>
+    
+    <div class="click-message">Click anywhere to honk! 🚛</div>
+    
+    <script>
+        // Create audio context for honk sound
+        let audioContext = null;
+        
+        function playHonk() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Create oscillators for truck horn sound (3-tone for richer sound)
+            const oscillator1 = audioContext.createOscillator();
+            const oscillator2 = audioContext.createOscillator();
+            const oscillator3 = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            const filter = audioContext.createBiquadFilter();
+            
+            // Set frequencies for air horn (classic truck horn frequencies)
+            oscillator1.frequency.setValueAtTime(220, audioContext.currentTime);
+            oscillator2.frequency.setValueAtTime(275, audioContext.currentTime);
+            oscillator3.frequency.setValueAtTime(330, audioContext.currentTime);
+            
+            // Mix of wave types for more realistic sound
+            oscillator1.type = 'sawtooth';
+            oscillator2.type = 'square';
+            oscillator3.type = 'sawtooth';
+            
+            // Add some vibrato for realism
+            const vibrato = audioContext.createOscillator();
+            const vibratoGain = audioContext.createGain();
+            vibrato.frequency.value = 5;
+            vibratoGain.gain.value = 3;
+            vibrato.connect(vibratoGain);
+            vibratoGain.connect(oscillator1.frequency);
+            vibratoGain.connect(oscillator2.frequency);
+            
+            // Set up filter for warmer sound
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1500, audioContext.currentTime);
+            
+            // Connect oscillators through filter to gain node
+            oscillator1.connect(filter);
+            oscillator2.connect(filter);
+            oscillator3.connect(filter);
+            filter.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // More complex volume envelope
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            gainNode.gain.linearRampToValueAtTime(0.4, audioContext.currentTime + 0.05);
+            gainNode.gain.linearRampToValueAtTime(0.35, audioContext.currentTime + 0.3);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.7);
+            
+            // Start all oscillators
+            oscillator1.start(audioContext.currentTime);
+            oscillator2.start(audioContext.currentTime);
+            oscillator3.start(audioContext.currentTime);
+            vibrato.start(audioContext.currentTime);
+            
+            // Stop all oscillators
+            oscillator1.stop(audioContext.currentTime + 0.7);
+            oscillator2.stop(audioContext.currentTime + 0.7);
+            oscillator3.stop(audioContext.currentTime + 0.7);
+            vibrato.stop(audioContext.currentTime + 0.7);
+        }
+        
+        // Honk sound effect
+        document.body.addEventListener('click', function(e) {
+            // Play honk sound
+            playHonk();
+            
+            // Create honk text
+            const honk = document.createElement('div');
+            honk.className = 'honk';
+            honk.textContent = 'HONK!';
+            honk.style.left = e.clientX + 'px';
+            honk.style.top = e.clientY + 'px';
+            document.body.appendChild(honk);
+            
+            // Remove after animation
+            setTimeout(() => {
+                honk.remove();
+            }, 1000);
+            
+            // Make truck jump
+            const truck = document.getElementById('truck');
+            truck.style.animation = 'none';
+            setTimeout(() => {
+                truck.style.animation = 'bounce 0.5s ease-in-out infinite alternate';
+            }, 10);
+        });
+    </script>
+</body>
+</html>
