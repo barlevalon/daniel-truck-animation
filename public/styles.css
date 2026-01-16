@@ -178,6 +178,11 @@ body {
     color: #555;
 }
 
+.trailer-text:active {
+    color: #666;
+    transform: translate(-50%, -50%) scale(0.98);
+}
+
 /* Wheels */
 .wheel {
     position: absolute;
@@ -758,8 +763,8 @@ h1 {
     }
 
     .sun {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         top: 20px;
         right: 15px;
     }
@@ -818,8 +823,8 @@ h1 {
     }
 
     .sun {
-        width: 40px;
-        height: 40px;
+        width: 44px;
+        height: 44px;
         top: 10px;
         right: 15px;
     }
@@ -995,6 +1000,22 @@ body.night-mode .instructions-title {
     z-index: 5;
 }
 
+/* Expanded touch target for headlights - 44x44px minimum per touch-first-ui spec */
+.headlight::before {
+    content: '';
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Transparent hit area extends beyond visual headlight */
+}
+
+.headlight:active {
+    filter: brightness(1.3);
+}
+
 .headlight-top {
     bottom: 45px;
 }
@@ -1124,4 +1145,163 @@ body.night-mode .instructions-title {
 
 .modal-btn-ok:hover {
     box-shadow: 0 6px 16px rgba(255, 202, 40, 0.5);
+}
+
+/* Vehicle Selector */
+.vehicle-selector {
+    position: absolute;
+    right: 30px;
+    top: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 20;
+}
+
+.vehicle-option {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(255, 223, 138, 0.9));
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2em;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vehicle-option:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.vehicle-option:active {
+    transform: scale(0.95);
+}
+
+.vehicle-option.active {
+    border-color: #ffca28;
+    box-shadow: 0 0 0 3px rgba(255, 202, 40, 0.5), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.vehicle-icon {
+    line-height: 1;
+}
+
+/* Vehicle type styles - CSS custom property based */
+.truck-cab {
+    background: var(--cab-color, #FF6B6B);
+}
+
+.trailer {
+    background: var(--trailer-color, #FFE66D);
+}
+
+.trailer-stripe {
+    background: var(--stripe-color, #FF6B6B);
+}
+
+/* Garbage Truck specific styles */
+.cab-garbage {
+    background: #4CAF50 !important;
+    border-radius: 8px 8px 5px 5px;
+}
+
+.trailer-garbage {
+    background: #388E3C !important;
+    border-radius: 5px 5px 0 0;
+}
+
+.trailer-garbage .trailer-stripe {
+    background: #81C784 !important;
+}
+
+.cab-garbage .cab-window {
+    background: #B2DFDB;
+}
+
+/* Cybertruck specific styles */
+.cab-cybertruck {
+    background: #FF69B4 !important;
+    border-radius: 2px 15px 5px 5px;
+    clip-path: polygon(0 100%, 0 30%, 50% 0, 100% 20%, 100% 100%);
+}
+
+.trailer-cybertruck {
+    background: #FF69B4 !important;
+    border-radius: 3px;
+    clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 100%);
+}
+
+.trailer-cybertruck .trailer-stripe {
+    background: #FFB6C1 !important;
+}
+
+.cab-cybertruck .cab-window {
+    background: #87CEEB;
+    clip-path: polygon(0 100%, 20% 0, 100% 0, 100% 100%);
+}
+
+/* Night mode vehicle selector */
+body.night-mode .vehicle-option {
+    background: linear-gradient(145deg, rgba(60, 60, 80, 0.95), rgba(80, 70, 60, 0.95));
+    border-color: rgba(200, 200, 200, 0.4);
+}
+
+body.night-mode .vehicle-option.active {
+    border-color: #ffaa44;
+    box-shadow: 0 0 0 3px rgba(255, 170, 68, 0.4), 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive vehicle selector */
+@media (max-width: 600px) {
+    .vehicle-selector {
+        right: 15px;
+        top: auto;
+        bottom: 20px;
+        flex-direction: row;
+        gap: 10px;
+    }
+
+    .vehicle-option {
+        width: 52px;
+        height: 52px;
+        font-size: 1.6em;
+    }
+}
+
+@media (max-width: 400px) {
+    .vehicle-selector {
+        right: 10px;
+        bottom: 15px;
+        gap: 8px;
+    }
+
+    .vehicle-option {
+        width: 44px;
+        height: 44px;
+        font-size: 1.4em;
+        border-width: 3px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .vehicle-selector {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        bottom: auto;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .vehicle-option {
+        width: 44px;
+        height: 44px;
+        font-size: 1.2em;
+        border-width: 2px;
+    }
 }

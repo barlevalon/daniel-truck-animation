@@ -1,6 +1,45 @@
 // Create audio context for honk sound
 let audioContext = null;
 
+// Vehicle configurations
+const VEHICLES = {
+    semi: {
+        name: 'Semi Truck',
+        icon: '🚛',
+        cabClass: 'cab-semi',
+        trailerClass: 'trailer-semi',
+        colors: {
+            cab: '#FF6B6B',
+            trailer: '#FFE66D',
+            stripe: '#FF6B6B'
+        }
+    },
+    garbage: {
+        name: 'Garbage Truck',
+        icon: '🗑️',
+        cabClass: 'cab-garbage',
+        trailerClass: 'trailer-garbage',
+        colors: {
+            cab: '#4CAF50',
+            trailer: '#388E3C',
+            stripe: '#81C784'
+        }
+    },
+    cybertruck: {
+        name: 'Pink Cybertruck',
+        icon: '🚗',
+        cabClass: 'cab-cybertruck',
+        trailerClass: 'trailer-cybertruck',
+        colors: {
+            cab: '#FF69B4',
+            trailer: '#FF69B4',
+            stripe: '#FFB6C1'
+        }
+    }
+};
+
+let currentVehicle = 'semi';
+
 function ensureAudioContext() {
     if (!audioContext) {
         audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -190,9 +229,82 @@ function toggleNightMode() {
 }
 
 // Toggle instructions panel
-document.getElementById('instructions-header') ||
-document.querySelector('.instructions-header').addEventListener('click', () => {
-    document.getElementById('instructions').classList.toggle('collapsed');
+const instructionsHeader = document.getElementById('instructions-header') || document.querySelector('.instructions-header');
+if (instructionsHeader) {
+    instructionsHeader.addEventListener('click', () => {
+        document.getElementById('instructions').classList.toggle('collapsed');
+    });
+}
+
+// Vehicle selection
+function switchVehicle(vehicleId) {
+    if (!VEHICLES[vehicleId]) return;
+    
+    const truck = document.getElementById('truck');
+    const cab = document.getElementById('truck-cab');
+    const trailer = document.getElementById('trailer');
+    const stripe = document.querySelector('.trailer-stripe');
+    
+    // Remove all vehicle classes
+    Object.values(VEHICLES).forEach(v => {
+        cab.classList.remove(v.cabClass);
+        trailer.classList.remove(v.trailerClass);
+    });
+    
+    // Add new vehicle classes
+    const vehicle = VEHICLES[vehicleId];
+    cab.classList.add(vehicle.cabClass);
+    trailer.classList.add(vehicle.trailerClass);
+    
+    // Apply colors via CSS custom properties
+    cab.style.setProperty('--cab-color', vehicle.colors.cab);
+    trailer.style.setProperty('--trailer-color', vehicle.colors.trailer);
+    stripe.style.setProperty('--stripe-color', vehicle.colors.stripe);
+    
+    // Update current vehicle
+    currentVehicle = vehicleId;
+    
+    // Update selector UI
+    updateVehicleSelector();
+}
+
+function updateVehicleSelector() {
+    document.querySelectorAll('.vehicle-option').forEach(opt => {
+        opt.classList.toggle('active', opt.dataset.vehicle === currentVehicle);
+    });
+}
+
+function cycleVehicle() {
+    const vehicleIds = Object.keys(VEHICLES);
+    const currentIndex = vehicleIds.indexOf(currentVehicle);
+    const nextIndex = (currentIndex + 1) % vehicleIds.length;
+    switchVehicle(vehicleIds[nextIndex]);
+}
+
+// Initialize vehicle selector
+function initVehicleSelector() {
+    const selector = document.getElementById('vehicle-selector');
+    if (!selector) return;
+    
+    selector.innerHTML = '';
+    
+    Object.entries(VEHICLES).forEach(([id, vehicle]) => {
+        const option = document.createElement('button');
+        option.className = 'vehicle-option' + (id === currentVehicle ? ' active' : '');
+        option.dataset.vehicle = id;
+        option.innerHTML = `<span class="vehicle-icon">${vehicle.icon}</span>`;
+        option.setAttribute('aria-label', vehicle.name);
+        option.addEventListener('click', (e) => {
+            e.stopPropagation();
+            switchVehicle(id);
+        });
+        selector.appendChild(option);
+    });
+}
+
+// Initialize on DOM ready
+document.addEventListener('DOMContentLoaded', () => {
+    initVehicleSelector();
 });
 
 document.addEventListener('keydown', (event) => {
@@ -222,5 +334,9 @@ document.addEventListener('keydown', (event) => {
     if (event.key && event.key.toLowerCase() === 'n') {
         event.preventDefault();
         toggleNightMode();
+    }
+    if (event.key && event.key.toLowerCase() === 'v') {
+        event.preventDefault();
+        cycleVehicle();
     }
 });
