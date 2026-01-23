@@ -9,7 +9,7 @@
 <body>
     <h1>HONK HONK! Big Rig Coming Through!</h1>
     
-    <div class="sun">
+    <div class="sun" role="button" tabindex="0" aria-label="Toggle night mode">
         <div class="crater crater1"></div>
         <div class="crater crater2"></div>
         <div class="crater crater3"></div>
@@ -17,7 +17,7 @@
         <div class="crater crater5"></div>
     </div>
 
-    <div class="stars">
+    <div class="stars" aria-hidden="true">
         <div class="star" style="top: 8%; left: 5%;"></div>
         <div class="star" style="top: 15%; left: 12%;"></div>
         <div class="star" style="top: 5%; left: 20%;"></div>
@@ -50,29 +50,29 @@
         <div class="star" style="top: 35%; left: 85%;"></div>
     </div>
     
-    <div class="cloud cloud1"></div>
-    <div class="cloud cloud2"></div>
-    <div class="cloud cloud3"></div>
+    <div class="cloud cloud1" aria-hidden="true"></div>
+    <div class="cloud cloud2" aria-hidden="true"></div>
+    <div class="cloud cloud3" aria-hidden="true"></div>
     
-    <div class="bird bird1"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
-    <div class="bird bird2"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
-    <div class="bird bird3"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
-    <div class="ufo"><span class="day-flyer">🛩️</span><span class="night-flyer">🛸</span></div>
+    <div class="bird bird1" aria-hidden="true"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
+    <div class="bird bird2" aria-hidden="true"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
+    <div class="bird bird3" aria-hidden="true"><span class="day-flyer">🕊️</span><span class="night-flyer">🦇</span></div>
+    <div class="ufo" aria-hidden="true"><span class="day-flyer">🛩️</span><span class="night-flyer">🛸</span></div>
     
     <!-- Trees in background -->
-    <div class="tree tree1">
+    <div class="tree tree1" aria-hidden="true">
         <div class="tree-trunk"></div>
         <div class="tree-leaves"></div>
     </div>
-    <div class="tree tree2">
+    <div class="tree tree2" aria-hidden="true">
         <div class="tree-trunk"></div>
         <div class="tree-leaves"></div>
     </div>
-    <div class="tree tree3">
+    <div class="tree tree3" aria-hidden="true">
         <div class="tree-trunk"></div>
         <div class="tree-leaves"></div>
     </div>
-    <div class="tree tree4">
+    <div class="tree tree4" aria-hidden="true">
         <div class="tree-trunk"></div>
         <div class="tree-leaves"></div>
     </div>
@@ -81,40 +81,66 @@
         <div class="road-lines"></div>
     </div>
     
-    <div class="truck-container" id="truck">
-        <div class="trailer" id="trailer">
-            <div class="trailer-stripe"></div>
-            <div class="trailer-text" id="trailer-text">DANIEL</div>
+    <div class="vehicle-container" id="vehicle-container">
+        <!-- Semi Truck -->
+        <div class="vehicle vehicle-semi" id="vehicle-semi" role="button" tabindex="0" aria-label="Semi truck - tap to honk">
+            <div class="semi-trailer">
+                <div class="semi-trailer-stripe"></div>
+                <div class="semi-trailer-text" id="trailer-text">BIG RIG</div>
+            </div>
+            <div class="semi-cab">
+                <div class="semi-window"></div>
+                <div class="semi-exhaust"></div>
+                <div class="semi-exhaust2"></div>
+                <div class="semi-mirror"></div>
+                <div class="semi-door-line"></div>
+                <div class="semi-side-step"></div>
+                <div class="semi-headlight semi-headlight-top"></div>
+                <div class="semi-headlight semi-headlight-bottom"></div>
+                <div class="semi-headlight-beam"></div>
+            </div>
+            <div class="semi-wheel semi-wheel1"></div>
+            <div class="semi-wheel semi-wheel2"></div>
+            <div class="semi-wheel semi-wheel3"></div>
+            <div class="semi-wheel semi-wheel4"></div>
+            <div class="semi-wheel semi-wheel5"></div>
+            <div class="semi-wheel semi-wheel6"></div>
+            <div class="semi-wheel semi-wheel7"></div>
         </div>
-        <div class="truck-cab" id="truck-cab">
-            <div class="cab-window"></div>
-            <div class="exhaust"></div>
-            <div class="exhaust2"></div>
-            <div class="mirror"></div>
-            <div class="door-line"></div>
-            <div class="side-step"></div>
-            <div class="headlight headlight-top"></div>
-            <div class="headlight headlight-bottom"></div>
-            <div class="headlight-beam"></div>
+
+        <!-- Garbage Truck -->
+        <div class="vehicle vehicle-garbage" id="vehicle-garbage" role="button" tabindex="0" aria-label="Garbage truck - tap to honk">
+            <div class="garbage-body">
+                <div class="garbage-body-stripe"></div>
+                <div class="garbage-body-text">TRASH CO</div>
+            </div>
+            <div class="garbage-cab">
+                <div class="garbage-window"></div>
+            </div>
+            <div class="garbage-wheel garbage-wheel1"></div>
+            <div class="garbage-wheel garbage-wheel2"></div>
+            <div class="garbage-wheel garbage-wheel3"></div>
         </div>
-        <!-- Front tractor wheel (1 single) -->
-        <div class="wheel wheel1"></div>
-        
-        <!-- Rear tractor wheels (2 dual sets shown as 2 wheels) -->
-        <div class="wheel wheel-dual wheel2"></div>
-        <div class="wheel wheel-dual wheel3"></div>
-        
-        <!-- Trailer wheels (4 dual sets shown as 4 wheels) -->
-        <div class="wheel wheel-dual wheel4"></div>
-        <div class="wheel wheel-dual wheel5"></div>
-        <div class="wheel wheel-dual wheel6"></div>
-        <div class="wheel wheel-dual wheel7"></div>
+
+        <!-- Cybertruck -->
+        <div class="vehicle vehicle-cybertruck" id="vehicle-cybertruck" role="button" tabindex="0" aria-label="Cybertruck - tap to honk">
+            <div class="cybertruck-top">
+                <div class="cybertruck-window"></div>
+                <div class="cybertruck-break cybertruck-break-1"></div>
+                <div class="cybertruck-break cybertruck-break-2"></div>
+            </div>
+            <div class="cybertruck-middle"></div>
+            <div class="cybertruck-wheel cybertruck-wheel-left"></div>
+            <div class="cybertruck-wheel cybertruck-wheel-right"></div>
+            <div class="cybertruck-tire cybertruck-tire-left"></div>
+            <div class="cybertruck-tire cybertruck-tire-right"></div>
+        </div>
     </div>
     
     <div class="instructions" role="note" id="instructions">
-        <div class="instructions-header">
+        <div class="instructions-header" id="instructions-header">
             <span class="instructions-title">Play Tips</span>
-            <button class="instructions-toggle" id="instructions-toggle" aria-label="Toggle instructions">▼</button>
+            <button class="instructions-toggle" id="instructions-toggle" aria-label="Toggle instructions" aria-expanded="true">▼</button>
         </div>
         <div class="instructions-content">
             <div class="instructions-item">
@@ -150,9 +176,9 @@
     </div>
 
     <!-- Custom name input modal -->
-    <div class="modal-overlay" id="name-modal">
-        <div class="modal">
-            <div class="modal-title">Enter a name for the truck:</div>
+    <div class="modal-overlay" id="name-modal" aria-hidden="true">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="name-modal-title">
+            <label class="modal-title" id="name-modal-title" for="name-input">Enter a name for the truck:</label>
             <input type="text" class="modal-input" id="name-input" maxlength="12" />
             <div class="modal-buttons">
                 <button class="modal-btn modal-btn-cancel" id="modal-cancel">Cancel</button>

@@ -1,40 +1,23 @@
 // Create audio context for honk sound
 let audioContext = null;
+let lastFocusElement = null;
 
 // Vehicle configurations
 const VEHICLES = {
     semi: {
         name: 'Semi Truck',
         icon: '🚛',
-        cabClass: 'cab-semi',
-        trailerClass: 'trailer-semi',
-        colors: {
-            cab: '#FF6B6B',
-            trailer: '#FFE66D',
-            stripe: '#FF6B6B'
-        }
+        defaultText: 'BIG RIG'
     },
     garbage: {
         name: 'Garbage Truck',
         icon: '🗑️',
-        cabClass: 'cab-garbage',
-        trailerClass: 'trailer-garbage',
-        colors: {
-            cab: '#4CAF50',
-            trailer: '#388E3C',
-            stripe: '#81C784'
-        }
+        defaultText: 'TRASH CO'
     },
     cybertruck: {
         name: 'Pink Cybertruck',
         icon: '🚗',
-        cabClass: 'cab-cybertruck',
-        trailerClass: 'trailer-cybertruck',
-        colors: {
-            cab: '#FF69B4',
-            trailer: '#FF69B4',
-            stripe: '#FFB6C1'
-        }
+        defaultText: ''
     }
 };
 
@@ -53,49 +36,63 @@ function ensureAudioContext() {
 }
 
 function playHonk(preset = 'classic') {
-    const context = ensureAudioContext();
-    const now = context.currentTime;
-    
-    const settings = {
-        classic: [220, 275, 330],
-        buddy: [330, 392, 494]
-    };
-    const frequencies = settings[preset] || settings.classic;
-    
-    const oscillators = frequencies.map(() => context.createOscillator());
-    const gainNode = context.createGain();
-    const filter = context.createBiquadFilter();
-    const vibrato = context.createOscillator();
-    const vibratoGain = context.createGain();
-    
-    oscillators.forEach((oscillator, index) => {
-        oscillator.frequency.setValueAtTime(frequencies[index], now);
-        oscillator.type = index === 1 ? 'square' : 'sawtooth';
-        oscillator.connect(filter);
-    });
-    
-    filter.type = 'lowpass';
-    filter.frequency.setValueAtTime(1500, now);
-    filter.connect(gainNode);
-    gainNode.connect(context.destination);
-    
-    gainNode.gain.setValueAtTime(0, now);
-    gainNode.gain.linearRampToValueAtTime(0.45, now + 0.05);
-    gainNode.gain.linearRampToValueAtTime(0.3, now + 0.3);
-    gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
-    
-    vibrato.frequency.value = 5;
-    vibratoGain.gain.value = preset === 'buddy' ? 5 : 3;
-    vibrato.connect(vibratoGain);
-    oscillators.forEach((oscillator) => {
-        vibratoGain.connect(oscillator.frequency);
-    });
-    
-    oscillators.forEach((oscillator) => oscillator.start(now));
-    vibrato.start(now);
-    
-    oscillators.forEach((oscillator) => oscillator.stop(now + 0.8));
-    vibrato.stop(now + 0.8);
+    let context;
+    try {
+        context = ensureAudioContext();
+    } catch (error) {
+        return;
+    }
+
+    if (!context) {
+        return;
+    }
+
+    try {
+        const now = context.currentTime;
+        
+        const settings = {
+            classic: [220, 275, 330],
+            buddy: [330, 392, 494]
+        };
+        const frequencies = settings[preset] || settings.classic;
+        
+        const oscillators = frequencies.map(() => context.createOscillator());
+        const gainNode = context.createGain();
+        const filter = context.createBiquadFilter();
+        const vibrato = context.createOscillator();
+        const vibratoGain = context.createGain();
+        
+        oscillators.forEach((oscillator, index) => {
+            oscillator.frequency.setValueAtTime(frequencies[index], now);
+            oscillator.type = index === 1 ? 'square' : 'sawtooth';
+            oscillator.connect(filter);
+        });
+        
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(1500, now);
+        filter.connect(gainNode);
+        gainNode.connect(context.destination);
+        
+        gainNode.gain.setValueAtTime(0, now);
+        gainNode.gain.linearRampToValueAtTime(0.45, now + 0.05);
+        gainNode.gain.linearRampToValueAtTime(0.3, now + 0.3);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.8);
+        
+        vibrato.frequency.value = 5;
+        vibratoGain.gain.value = preset === 'buddy' ? 5 : 3;
+        vibrato.connect(vibratoGain);
+        oscillators.forEach((oscillator) => {
+            vibratoGain.connect(oscillator.frequency);
+        });
+        
+        oscillators.forEach((oscillator) => oscillator.start(now));
+        vibrato.start(now);
+        
+        oscillators.forEach((oscillator) => oscillator.stop(now + 0.8));
+        vibrato.stop(now + 0.8);
+    } catch (error) {
+        return;
+    }
 }
 
 function addHonkBurst(positionX, positionY, text = 'HONK!') {
@@ -111,15 +108,17 @@ function addHonkBurst(positionX, positionY, text = 'HONK!') {
     }, 1000);
 }
 
-function bounceTruck() {
-    const truck = document.getElementById('truck');
-    if (!truck) {
+function bounceVehicle() {
+    const container = document.getElementById('vehicle-container');
+    if (!container) {
         return;
     }
-    truck.style.animation = 'none';
-    setTimeout(() => {
-        truck.style.animation = 'bounce 0.5s ease-in-out infinite alternate';
-    }, 10);
+    container.style.animation = 'none';
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            container.style.animation = 'bounce 0.5s ease-in-out infinite alternate';
+        });
+    });
 }
 
 function handleHonk(event, options = {}) {
@@ -129,137 +128,150 @@ function handleHonk(event, options = {}) {
     const preset = options.preset || 'classic';
     playHonk(preset);
     addHonkBurst(clickX, clickY, text);
-    bounceTruck();
+    bounceVehicle();
 }
 
 function toggleLights() {
-    const truck = document.getElementById('truck');
-    if (!truck) {
+    const activeVehicle = document.querySelector('.vehicle.active');
+    if (!activeVehicle) {
         return;
     }
-    truck.classList.toggle('lights-on');
+    activeVehicle.classList.toggle('lights-on');
 }
-
-
 
 function showNameModal() {
     const modal = document.getElementById('name-modal');
     const input = document.getElementById('name-input');
-    input.value = document.getElementById('trailer-text').textContent;
+    const trailerText = document.getElementById('trailer-text');
+
+    if (!modal || !input || !trailerText) {
+        return;
+    }
+
+    lastFocusElement = document.activeElement;
+    input.value = trailerText.textContent;
     modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
     input.focus();
     input.select();
 }
 
 function hideNameModal() {
-    document.getElementById('name-modal').classList.remove('active');
+    const modal = document.getElementById('name-modal');
+    if (!modal) {
+        return;
+    }
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    if (lastFocusElement && typeof lastFocusElement.focus === 'function') {
+        lastFocusElement.focus();
+    }
+    lastFocusElement = null;
 }
 
 function submitName() {
     const input = document.getElementById('name-input');
+    const trailerText = document.getElementById('trailer-text');
+
+    if (!input || !trailerText) {
+        return;
+    }
+
     if (input.value.trim() !== '') {
-        document.getElementById('trailer-text').textContent = input.value.trim().toUpperCase();
+        trailerText.textContent = input.value.trim().toUpperCase();
     }
     hideNameModal();
 }
 
-document.getElementById('trailer-text').addEventListener('click', (event) => {
-    event.stopPropagation();
-    showNameModal();
-});
+const focusableModalSelectors = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-document.getElementById('modal-ok').addEventListener('click', submitName);
-document.getElementById('modal-cancel').addEventListener('click', hideNameModal);
-
-document.getElementById('name-input').addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        submitName();
-    } else if (event.key === 'Escape') {
+function handleModalKeydown(event) {
+    if (event.key === 'Escape') {
+        event.preventDefault();
         hideNameModal();
+        return;
     }
-});
 
-document.getElementById('name-modal').addEventListener('click', (event) => {
-    if (event.target === event.currentTarget) {
-        hideNameModal();
+    if (event.key !== 'Tab') {
+        return;
     }
-});
 
-// Touch controls: tap cab for HONK
-document.getElementById('truck-cab').addEventListener('click', (event) => {
-    event.stopPropagation();
-    handleHonk(event, {
-        preset: 'classic',
-        text: 'HONK!'
-    });
-});
+    const modal = document.getElementById('name-modal');
+    if (!modal) {
+        return;
+    }
+    const focusable = modal.querySelectorAll(focusableModalSelectors);
+    if (!focusable.length) {
+        return;
+    }
 
-// Touch controls: tap trailer for TOOT
-document.getElementById('trailer').addEventListener('click', (event) => {
-    // Don't trigger if clicking the name
-    if (event.target.id === 'trailer-text') return;
-    event.stopPropagation();
-    handleHonk(event, {
-        preset: 'buddy',
-        text: 'TOOT!'
-    });
-});
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+    }
+}
 
-// Touch controls: tap sun/moon for night mode
-document.querySelector('.sun').addEventListener('click', (event) => {
-    event.stopPropagation();
-    toggleNightMode();
-});
-
-// Touch controls: tap headlights to toggle
-document.querySelectorAll('.headlight').forEach(light => {
-    light.addEventListener('click', (event) => {
+function onActivate(element, handler) {
+    if (!element) {
+        return;
+    }
+    element.addEventListener('click', (event) => {
         event.stopPropagation();
-        toggleLights();
+        handler(event);
     });
-});
+
+    element.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            handler(event);
+        }
+    });
+}
 
 function toggleNightMode() {
     document.body.classList.toggle('night-mode');
     // Auto-enable lights in night mode
-    const truck = document.getElementById('truck');
-    if (document.body.classList.contains('night-mode')) {
-        truck.classList.add('lights-on');
+    const activeVehicle = document.querySelector('.vehicle.active');
+    if (activeVehicle && document.body.classList.contains('night-mode')) {
+        activeVehicle.classList.add('lights-on');
     }
 }
 
 // Toggle instructions panel
-const instructionsHeader = document.getElementById('instructions-header') || document.querySelector('.instructions-header');
-if (instructionsHeader) {
-    instructionsHeader.addEventListener('click', () => {
-        document.getElementById('instructions').classList.toggle('collapsed');
-    });
+function initInstructions() {
+    const instructionsHeader = document.getElementById('instructions-header') || document.querySelector('.instructions-header');
+    const instructionsToggle = document.getElementById('instructions-toggle');
+    if (instructionsHeader) {
+        instructionsHeader.addEventListener('click', () => {
+            const instructions = document.getElementById('instructions');
+            if (!instructions) return;
+            const isCollapsed = instructions.classList.toggle('collapsed');
+            if (instructionsToggle) {
+                instructionsToggle.setAttribute('aria-expanded', String(!isCollapsed));
+            }
+        });
+    }
 }
 
-// Vehicle selection
+// Vehicle selection - now just show/hide
 function switchVehicle(vehicleId) {
     if (!VEHICLES[vehicleId]) return;
     
-    const truck = document.getElementById('truck');
-    const cab = document.getElementById('truck-cab');
-    const trailer = document.getElementById('trailer');
-    const stripe = document.querySelector('.trailer-stripe');
-    
-    // Remove all vehicle classes
-    Object.values(VEHICLES).forEach(v => {
-        cab.classList.remove(v.cabClass);
-        trailer.classList.remove(v.trailerClass);
+    // Hide all vehicles
+    document.querySelectorAll('.vehicle').forEach(v => {
+        v.classList.remove('active');
     });
     
-    // Add new vehicle classes
-    const vehicle = VEHICLES[vehicleId];
-    cab.classList.add(vehicle.cabClass);
-    trailer.classList.add(vehicle.trailerClass);
-    
-    // Apply colors via CSS custom properties
-    cab.style.setProperty('--cab-color', vehicle.colors.cab);
-    trailer.style.setProperty('--trailer-color', vehicle.colors.trailer);
-    stripe.style.setProperty('--stripe-color', vehicle.colors.stripe);
+    // Show selected vehicle
+    const vehicleElement = document.getElementById(`vehicle-${vehicleId}`);
+    if (vehicleElement) {
+        vehicleElement.classList.add('active');
+    }
     
     // Update current vehicle
     currentVehicle = vehicleId;
@@ -269,7 +281,11 @@ function switchVehicle(vehicleId) {
 }
 
 function updateVehicleSelector() {
-    document.querySelectorAll('.vehicle-option').forEach(opt => {
+    const options = document.querySelectorAll('.vehicle-option');
+    if (!options.length) {
+        return;
+    }
+    options.forEach(opt => {
         opt.classList.toggle('active', opt.dataset.vehicle === currentVehicle);
     });
 }
@@ -300,12 +316,85 @@ function initVehicleSelector() {
         });
         selector.appendChild(option);
     });
+    
+    // Show default vehicle
+    switchVehicle(currentVehicle);
 }
 
 // Initialize on DOM ready
-document.addEventListener('DOMContentLoaded', () => {
+function initializeInteractions() {
+    const trailerText = document.getElementById('trailer-text');
+    const modalOk = document.getElementById('modal-ok');
+    const modalCancel = document.getElementById('modal-cancel');
+    const nameInput = document.getElementById('name-input');
+    const nameModal = document.getElementById('name-modal');
+
+    if (trailerText) {
+        trailerText.addEventListener('click', (event) => {
+            event.stopPropagation();
+            showNameModal();
+        });
+    }
+
+    if (modalOk) {
+        modalOk.addEventListener('click', submitName);
+    }
+
+    if (modalCancel) {
+        modalCancel.addEventListener('click', hideNameModal);
+    }
+
+    if (nameInput) {
+        nameInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                submitName();
+            } else if (event.key === 'Escape') {
+                hideNameModal();
+            }
+        });
+    }
+
+    if (nameModal) {
+        nameModal.addEventListener('click', (event) => {
+            if (event.target === event.currentTarget) {
+                hideNameModal();
+            }
+        });
+        nameModal.addEventListener('keydown', handleModalKeydown);
+    }
+
+    // Set up click handlers for all vehicles
+    document.querySelectorAll('.vehicle').forEach(vehicle => {
+        vehicle.addEventListener('click', (event) => {
+            // Don't honk if clicking on trailer text
+            if (event.target.id === 'trailer-text' || event.target.classList.contains('semi-trailer-text')) {
+                return;
+            }
+            handleHonk(event, {
+                preset: 'classic',
+                text: 'HONK!'
+            });
+        });
+    });
+
+    const sun = document.querySelector('.sun');
+    onActivate(sun, () => {
+        toggleNightMode();
+    });
+
+    // Headlight handlers for semi
+    document.querySelectorAll('.semi-headlight').forEach(light => {
+        onActivate(light, (e) => {
+            e.stopPropagation();
+            toggleLights();
+        });
+    });
+
+    initInstructions();
     initVehicleSelector();
-});
+}
+
+document.addEventListener('DOMContentLoaded', initializeInteractions);
 
 document.addEventListener('keydown', (event) => {
     // Don't trigger shortcuts when typing in an input
