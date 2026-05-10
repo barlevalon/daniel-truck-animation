@@ -1,2 +1,2 @@
 publish:
-	rsync -rv public/ pgs.sh:/truck/
+	rsync --delete -az public/ ansible@personal:/srv/homelab/runtime/truck/site/

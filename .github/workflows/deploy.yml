@@ -1,0 +1,57 @@
+name: Build and deploy
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: truck-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Validate static site
+        run: |
+          test -f public/index.html
+          test -f public/styles.css
+          test -f public/scripts.js
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: validate
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://truck.hearter.io/
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Configure SSH key
+        run: |
+          mkdir -p ~/.ssh
+          chmod 700 ~/.ssh
+          printf '%s\n' "${{ secrets.ANSIBLE_SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+
+      - name: Connect to Tailscale
+        uses: tailscale/github-action@v4
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_CLIENT_SECRET }}
+          tags: tag:ci
+
+      - name: Trust Tailscale SSH host key
+        run: ssh-keyscan -H personal >> ~/.ssh/known_hosts
+
+      - name: Deploy to personal
+        run: rsync --delete -az public/ ansible@personal:/srv/homelab/runtime/truck/site/
